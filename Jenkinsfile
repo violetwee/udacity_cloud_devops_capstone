@@ -13,17 +13,19 @@ pipeline {
 			steps {
 				
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-					sh '''		
-						cd blue 
-						docker build --tag=blue .
-					'''
+					dir("blue") {
+						sh '''	
+							docker build --tag=blue .
+						'''
+					}
 				}
 				
         			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-					sh '''
-						cd green 
-						docker build --tag green .
-					'''
+					dir("green") {
+						sh '''
+							docker build --tag green .
+						'''
+					}
 				}
 			}
 		}
@@ -31,20 +33,22 @@ pipeline {
 		stage('Push Docker image To Docker Hub') {
 			steps {
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-					sh '''
-						cd blue
-						docker login -u $USERNAME -p $PASSWORD
-						docker image tag blue violetwee/blue
-						docker image push violetwee/blue
-					'''
+					dir("blue") {
+						sh '''
+							docker login -u $USERNAME -p $PASSWORD
+							docker image tag blue violetwee/blue
+							docker image push violetwee/blue
+						'''
+					}
 				}
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-					sh '''
-						cd green
-						docker login -u $USERNAME -p $PASSWORD
-						docker image tag green violetwee/green
-						docker image push violetwee/green
-					'''
+					dir("green") {
+						sh '''
+							docker login -u $USERNAME -p $PASSWORD
+							docker image tag green violetwee/green
+							docker image push violetwee/green
+						'''
+					}
 				}
 			}
 		}    
