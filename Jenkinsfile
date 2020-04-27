@@ -1,4 +1,7 @@
 pipeline {
+	environment {
+		registryCredential = 'DOCKER_CRED'
+	}
 	agent any
 	stages {
 
@@ -11,20 +14,20 @@ pipeline {
 		
 		stage('Build Docker images') {
 			steps {
-				withCredentials([string(credentialsId: 'DOCKER_CRED', variable: 'PASSWORD')]) {
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker_hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 					dir("blue") {
 						sh '''
-							docker login -u violetwee -p ${PASSWORD}
+							docker login -u ${USERNAME} -p ${PASSWORD}
 							docker build --tag=blue .
 						'''
 					}
 				  
 				}
 				
-        			withCredentials([string(credentialsId: 'DOCKER_CRED', variable: 'PASSWORD')]) {
+        			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker_hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 					dir("green") {
 						sh '''
-							docker login -u violetwee -p ${PASSWORD}
+							docker login -u ${USERNAME} -p ${PASSWORD}
 							docker build --tag green .
 						'''
 					}
@@ -34,19 +37,19 @@ pipeline {
 
 		stage('Push Docker image To Docker Hub') {
 			steps {
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker_hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 					dir("blue") {
 						sh '''
-							docker login -u $USERNAME -p $PASSWORD
+							docker login -u ${USERNAME} -p ${PASSWORD}
 							docker image tag blue violetwee/blue
 							docker image push violetwee/blue
 						'''
 					}
 				}
-        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker_hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 					dir("green") {
 						sh '''
-							docker login -u $USERNAME -p $PASSWORD
+							docker login -u ${USERNAME} -p ${PASSWORD}
 							docker image tag green violetwee/green
 							docker image push violetwee/green
 						'''
