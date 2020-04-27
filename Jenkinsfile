@@ -21,7 +21,7 @@ pipeline {
 				  
 				}
 				
-        			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', variable: 'PASSWORD']]){
+        			withCredentials([string(credentialsId: 'DOCKER_CRED', variable: 'PASSWORD')]) {
 					dir("green") {
 						sh '''
 							docker login -u violetwee -p ${PASSWORD}
