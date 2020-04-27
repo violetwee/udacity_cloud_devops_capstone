@@ -14,7 +14,8 @@ pipeline {
 				
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 					dir("blue") {
-						sh '''	
+						sh '''
+							echo $USERNAME
 							docker login -u $USERNAME -p $PASSWORD
 							docker build --tag=blue .
 						'''
