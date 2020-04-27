@@ -13,15 +13,15 @@ pipeline {
 			steps {
 				
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-					sh 'cd blue'
-					sh '''						
+					sh '''		
+						cd blue &&\
 						docker build --tag=blue .
 					'''
 				}
 				
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-					sh 'cd green'
 					sh '''
+						cd green &&\
 						docker build --tag green .
 					'''
 				}
