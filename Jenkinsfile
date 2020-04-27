@@ -11,21 +11,20 @@ pipeline {
 		
 		stage('Build Docker images') {
 			steps {
-				
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				withCredentials([string(credentialsId: 'DOCKER_CRED', variable: 'PASSWORD')]) {
 					dir("blue") {
 						sh '''
-							echo $USERNAME
-							docker login -u $USERNAME -p $PASSWORD
+							docker login -u violetwee -p ${PASSWORD}
 							docker build --tag=blue .
 						'''
 					}
+				  
 				}
 				
-        			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+        			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', variable: 'PASSWORD']]){
 					dir("green") {
 						sh '''
-							docker login -u $USERNAME -p $PASSWORD
+							docker login -u violetwee -p ${PASSWORD}
 							docker build --tag green .
 						'''
 					}
