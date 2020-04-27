@@ -13,12 +13,12 @@ pipeline {
 			steps {
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
 					sh '''
-						docker build -t violetwee/blue .
+						docker build --tag=blue .
 					'''
 				}
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
 					sh '''
-						docker build -t violetwee/green .
+						docker build --tag green .
 					'''
 				}
 			}
@@ -29,13 +29,15 @@ pipeline {
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 					sh '''
 						docker login -u $USERNAME -p $PASSWORD
-						docker push violetwee/blue
+						docker image tag blue violetwee/blue
+						docker image push violetwee/blue
 					'''
 				}
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 					sh '''
 						docker login -u $USERNAME -p $PASSWORD
-						docker push violetwee/green
+						docker image tag green violetwee/green
+						docker image push violetwee/green
 					'''
 				}
 			}
