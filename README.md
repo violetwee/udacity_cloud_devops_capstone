@@ -22,18 +22,19 @@ Jenkins pipeline:
 - Blue Ocean
 - Pipeline AWS
 - Docker
+
 Then, add credentials for AWS and Docker Hub.
 
 3. Install and configure AWS CLI
 4. Install AWS IAM Authenticator
 5. Install eksctl
 6. Install linter
-    sudo apt install tidy
 7. Install and configure kubectl
 8. Install Docker
 
 ### Create an Amazon EKS Cluster
 eksctl create cluster --name capstone --without-nodegroup
+
 Note: --name param does not support underscore (ie. capstone_cluster is not allowed)
 
 eksctl create nodegroup --cluster capstone --name capstone-nodes --node-type t3.small --node-ami auto --nodes 3 --nodes-min 1 --nodes-max 3
