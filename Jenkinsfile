@@ -71,7 +71,7 @@ pipeline {
 				dir("blue") {
 					withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
 						sh '''
-							kubectl apply -f ./blue/blue-controller.json
+							kubectl apply -f ./blue-controller.json
 						'''
 					}
 				}
