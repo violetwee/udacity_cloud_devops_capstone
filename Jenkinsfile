@@ -62,8 +62,8 @@ pipeline {
 			steps {
 				withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
 					sh '''
-						kubectl config current-context
-						kubectl config use-context jenkins@capstone.us-east-1.eksctl.io
+						kubectl config view
+						kubectl config set-context jenkins@capstone.us-east-1.eksctl.io
 					'''
 				}
 			}
