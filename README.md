@@ -1,56 +1,67 @@
-[![violetwee](https://circleci.com/gh/violetwee/operationalize_ml_microservice.svg?style=svg)](https://app.circleci.com/pipelines/github/violetwee/operationalize_ml_microservice?branch=master)
-
 ## Project Overview
 
-In this project, we operationalize a Machine Learning Microservice API using Docker, Kubernetes and CircleCI.
+This is the capstone project for Udacity's Cloud DevOps Nanodegree program.
 
-Given a pre-trained, `sklearn` model that has been trained to predict housing prices in Boston according to several features, such as average rooms in a home and data about highway access, teacher-to-pupil ratios, and so on, we operationalize a Python flask app—in a provided file, `app.py`—that serves out predictions (inference) about housing prices through API calls. You can read more about the data, which was initially taken from Kaggle, on [the data source site](https://www.kaggle.com/c/boston-housing).
+In this project, we build a pipeline that starts from a Git commit, which triggers the Jenkins pipeline below to run. 
 
-This project could be extended to any pre-trained machine learning model, such as those for image recognition and data labeling.
-
-## Repo Structure and Files
-
-- **.circleci/config.yml**
-  Validates that the project builds without errors
-
-- **model_data/\***
-  Data source used for making predictions
-
-- **output_txt_files/\***
-  Sample output after successfully making a prediction on Docker and Kubernetes
-
-- **app.py**
-  Python Flask app that serves out housing prices predictions through API calls
-
-- **Dockerfile**
-  Containerizes Flask app in Docker
-
-- **Makefile**
-  Lints Dockerfile and app.py
-
-- **requirements.txt**
-  List of dependencies to install
-
-- **Scripts**
-  - **run_docker.sh**: Build, list and run docker
-  - **run_kubernetes.sh**: Run docker image with kubernetes
-  - **upload_docker.sh**: Uploads docker image to Docker Hub. Replace dockerpath value to upload to your own personal Docker Hub
-  - **make_prediction.sh**: Sends a POST request with a set of fixed parameters to Flask API (for testing purposes)
+The Jenkins pipeline that looks like this:
+1. Lint HTML
+2. Build Docker images for Blue and Green deployments
+3. Push Docker images to Docker Hub (Docker Hub account required)
+4. Set cluster as current context (Amazon EKS cluster required)
+5. Deploy blue container 
+6. Deploy green container
+7. Create service in the cluster, redirect to Blue
+8. Prompt for traffic redirection (Proceed/Abort)
+9. If Proceed, we create service in the cluster and redirect to Green
 
 ## Setup the Environment
 
-- Create a virtualenv and activate it
-- Run `make install` to install the necessary dependencies
+1. Install Jenkins on an EC2 server
+sudo apt update
+sudo apt upgrade
+sudo apt install default-jdk
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
 
-### Running `app.py`
+Fix for: The following signatures couldn't be verified because the public key is not available
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <PUBKEY>
+sudo apt-get update
 
-1. Standalone: `python app.py`
-2. Run in Docker: `./run_docker.sh`
-3. Run in Kubernetes: `./run_kubernetes.sh`
+sudo apt install jenkins
+sudo systemctl status jenkins
 
-### Kubernetes Steps
+2. Install Jenkins Plugins
+- Blue Ocean
+- Pipeline AWS
+- Docker
+Then, add credentials for AWS and Docker Hub.
 
-- Setup and Configure Docker locally
-- Setup and Configure Kubernetes locally
-- Create Flask app in Container
-- Run via kubectl
+3. Install and configure AWS CLI
+4. Install AWS IAM Authenticator
+5. Install eksctl
+6. Install linter
+    sudo apt install tidy
+7. Install and configure kubectl
+8. Install Docker
+
+### Create an Amazon EKS Cluster
+eksctl create cluster --name capstone --without-nodegroup
+Note: --name param does not support underscore (ie. capstone_cluster is not allowed)
+
+eksctl create nodegroup --cluster capstone --name capstone-nodes --node-type t3.small --node-ami auto --nodes 3 --nodes-min 1 --nodes-max 3
+
+### Things to note
+1. ssh to server logs in as ubuntu user. However, Jenkins pipeline runs commands as jenkins user. Make sure packages are installed for jenkins user. Otherwise, may encounter "aws" not found or "kubectl" config as empty. To switch to jenkins user, run "sudo -i -u jenkins"
+2. Installation of plugins on Jenkins may fail with timeout error. This could be due to some mirrors malfunctioning. Try again after a while. 
+3. Git repo root needs to have a Jenkinsfile in order for Jenkins pipeline to run
+4. 
+
+### References
+https://bogotobogo.com/DevOps/AWS/aws-EKS-Elastic-Container-Service-Kubernetes.php
+https://medium.com/@andresaaap/jenkins-pipeline-for-blue-green-deployment-using-aws-eks-kubernetes-docker-7e5d6a401021
+https://medium.com/@andresaaap/jenkins-pipeline-for-blue-green-deployment-using-aws-eks-kubernetes-docker-7e5d6a401021
+https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html
+https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
+
