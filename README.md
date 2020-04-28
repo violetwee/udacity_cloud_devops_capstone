@@ -55,7 +55,7 @@ eksctl create nodegroup --cluster capstone --name capstone-nodes --node-type t3.
 1. ssh to server logs in as ubuntu user. However, Jenkins pipeline runs commands as jenkins user. Make sure packages are installed for jenkins user. Otherwise, may encounter "aws" not found or "kubectl" config as empty. To switch to jenkins user, run "sudo -i -u jenkins"
 2. Installation of plugins on Jenkins may fail with timeout error. This could be due to some mirrors malfunctioning. Try again after a while. 
 3. Git repo root needs to have a Jenkinsfile in order for Jenkins pipeline to run
-4. 
+4. Create EKS cluster via AWS CLI, otherwise may encounter auth issues 
 
 ### References
 https://bogotobogo.com/DevOps/AWS/aws-EKS-Elastic-Container-Service-Kubernetes.php
