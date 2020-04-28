@@ -64,7 +64,7 @@ pipeline {
 					sh '''
 						aws --version
 						kubectl config current-context
-						kubectl config use-context jenkins@capstone.us-east-1.eksctl.io
+						kubectl config use-context arn:aws:eks:us-east-1:557316943576:cluster/capstone
 					'''
 				}
 			}
