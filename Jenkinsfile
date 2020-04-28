@@ -1,7 +1,4 @@
 pipeline {
-	environment {
-		registryCredential = 'DOCKER_CRED'
-	}
 	agent any
 	stages {
 
