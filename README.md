@@ -18,19 +18,6 @@ Jenkins pipeline:
 ## Setup the Environment
 
 1. Install Jenkins on an EC2 server
-sudo apt update
-sudo apt upgrade
-sudo apt install default-jdk
-wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-
-Fix for: The following signatures couldn't be verified because the public key is not available
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <PUBKEY>
-sudo apt-get update
-
-sudo apt install jenkins
-sudo systemctl status jenkins
-
 2. Install Jenkins Plugins
 - Blue Ocean
 - Pipeline AWS
