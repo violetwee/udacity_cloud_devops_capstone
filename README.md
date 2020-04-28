@@ -4,7 +4,7 @@ This is the capstone project for Udacity's Cloud DevOps Nanodegree program.
 
 In this project, we build a pipeline that starts from a Git commit, which triggers the Jenkins pipeline below to run. 
 
-The Jenkins pipeline that looks like this:
+Jenkins pipeline:
 1. Lint HTML
 2. Build Docker images for Blue and Green deployments
 3. Push Docker images to Docker Hub (Docker Hub account required)
