@@ -68,20 +68,24 @@ pipeline {
 
 		stage('Deploy blue container') {
 			steps {
-				withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
-					sh '''
-						kubectl apply -f ./blue/blue-controller.json
-					'''
+				dir("blue") {
+					withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
+						sh '''
+							kubectl apply -f ./blue/blue-controller.json
+						'''
+					}
 				}
 			}
 		}
 
 		stage('Deploy green container') {
 			steps {
-				withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
-					sh '''
-						kubectl apply -f ./green/green-controller.json
-					'''
+				dir("green") {
+					withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
+						sh '''
+							kubectl apply -f ./green-controller.json
+						'''
+					}
 				}
 			}
 		}
