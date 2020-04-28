@@ -62,6 +62,7 @@ pipeline {
 			steps {
 				withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
 					sh '''
+						aws --version
 						aws eks update-kubeconfig --name capstone
 					'''
 				}
