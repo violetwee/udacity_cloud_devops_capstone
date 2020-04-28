@@ -60,7 +60,7 @@ pipeline {
 				withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
 					sh '''
 						kubectl config current-context
-						kubectl config use-context jenkins@capstone.us-east-1.eksctl.io
+						kubectl config use-context arn:aws:eks:us-east-1:557316943576:cluster/capstone
 					'''
 				}
 			}
@@ -92,26 +92,30 @@ pipeline {
 
 		stage('Create the service in the cluster, redirect to blue') {
 			steps {
-				withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
-					sh '''
-						kubectl apply -f ./blue/blue-service.json
-					'''
+				dir("blue") {
+					withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
+						sh '''
+							kubectl apply -f ./blue-service.json
+						'''
+					}
 				}
 			}
 		}
 
 		stage('Redirect traffic confirmation') {
-        steps {
-            input "Do you want to redirect all traffic to GREEN?"
-        }
-    }
+			steps {
+			    input "Do you want to redirect all traffic to GREEN?"
+			}
+   		}
 
 		stage('Create the service in the cluster, redirect to green') {
 			steps {
-				withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
-					sh '''
-						kubectl apply -f ./green/green-service.json
-					'''
+				dir("green") {
+					withAWS(region:'us-east-1', credentials:'aws_cred_capstone') {
+						sh '''
+							kubectl apply -f ./green-service.json
+						'''
+					}
 				}
 			}
 		}
