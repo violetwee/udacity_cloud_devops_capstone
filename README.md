@@ -45,10 +45,18 @@ eksctl create nodegroup --cluster capstone --name capstone-nodes --node-type t3.
 4. Create EKS cluster via AWS CLI, otherwise may encounter auth issues 
 
 ### References
+AWS : EKS (ELASTIC CONTAINER SERVICE FOR KUBERNETES)
 https://bogotobogo.com/DevOps/AWS/aws-EKS-Elastic-Container-Service-Kubernetes.php
+
+Jenkins pipeline for blue green deployment using AWS EKS — Kubernetes — Docker 
 https://medium.com/@andresaaap/jenkins-pipeline-for-blue-green-deployment-using-aws-eks-kubernetes-docker-7e5d6a401021
-https://medium.com/@andresaaap/jenkins-pipeline-for-blue-green-deployment-using-aws-eks-kubernetes-docker-7e5d6a401021
+
+Create a kubeconfig for Amazon EKS
 https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html
+
+Installing aws-iam-authenticator
 https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html
+
+How To Install and Use Docker on Ubuntu 18.04
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 
