@@ -2,7 +2,7 @@
 
 This is the capstone project for Udacity's Cloud DevOps Nanodegree program.
 
-In this project, we build a pipeline that starts from a Git commit, which triggers the Jenkins pipeline below to run. 
+In this project, we automate a web deployment from a code commit (Git) to an Amazon EKS cluster that is load balanced with blue/green deployment. We use Jenkins for this process.
 
 Jenkins pipeline:
 1. Lint HTML
@@ -17,13 +17,12 @@ Jenkins pipeline:
 
 ## Setup the Environment
 
-1. Install Jenkins on an EC2 server
+1. Install Jenkins on an Amazon EC2 server
 2. Install Jenkins Plugins
 - Blue Ocean
 - Pipeline AWS
-- Docker
 
-Then, add credentials for AWS and Docker Hub.
+Then, add credentials for AWS and Docker Hub (Jenkins -> Credentials -> System -> Global Credentials).
 
 3. Install and configure AWS CLI
 4. Install AWS IAM Authenticator
@@ -39,7 +38,7 @@ Note: --name param does not support underscore (ie. capstone_cluster is not allo
 
 eksctl create nodegroup --cluster capstone --name capstone-nodes --node-type t3.small --node-ami auto --nodes 3 --nodes-min 1 --nodes-max 3
 
-### Things to note
+### Troubleshooting
 1. ssh to server logs in as ubuntu user. However, Jenkins pipeline runs commands as jenkins user. Make sure packages are installed for jenkins user. Otherwise, may encounter "aws" not found or "kubectl" config as empty. To switch to jenkins user, run "sudo -i -u jenkins"
 2. Installation of plugins on Jenkins may fail with timeout error. This could be due to some mirrors malfunctioning. Try again after a while. 
 3. Git repo root needs to have a Jenkinsfile in order for Jenkins pipeline to run
