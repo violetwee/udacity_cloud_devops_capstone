@@ -4,6 +4,8 @@ This is the capstone project for Udacity's Cloud DevOps Nanodegree program.
 
 In this project, we automate a web deployment from a code commit (Git) to an Amazon EKS cluster that is load balanced with blue/green deployment. We use Jenkins for this process.
 
+![Jenkins Pipeline](jenkins-pipeline.png)
+
 Jenkins pipeline:
 1. Lint HTML
 2. Build Docker images for Blue and Green deployments
