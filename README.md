@@ -34,12 +34,13 @@ Then, add credentials for AWS and Docker Hub (Jenkins -> Credentials -> System -
 8. Install Docker
 
 ### Create an Amazon EKS Cluster
+```
 eksctl create cluster --name capstone --without-nodegroup
-
+```
 Note: --name param does not support underscore (ie. capstone_cluster is not allowed)
-
+```
 eksctl create nodegroup --cluster capstone --name capstone-nodes --node-type t3.small --node-ami auto --nodes 3 --nodes-min 1 --nodes-max 3
-
+```
 ### Troubleshooting
 1. ssh to server logs in as ubuntu user. However, Jenkins pipeline runs commands as jenkins user. Make sure packages are installed for jenkins user. Otherwise, may encounter "aws" not found or "kubectl" config as empty. To switch to jenkins user, run "sudo -i -u jenkins"
 2. Installation of plugins on Jenkins may fail with timeout error. This could be due to some mirrors malfunctioning. Try again after a while. 
